@@ -1,0 +1,141 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+</head>
+
+<style>
+    body {
+        font-family: Arial;
+        background-color: #2323e0;
+    }
+
+    input[type=text],
+    select {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    input[type=submit] {
+        width: 100%;
+        background-color: #4169e1;
+        color: #FFD700;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    input[type=submit]:hover {
+        background-color: #0504aa;
+    }
+
+    div.container {
+        border-radius: 5px;
+        background-color: #f2f2f2;
+        padding: 20px;
+    }
+
+    .centeredDiv {
+        display: none;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        flex-direction: column;
+    }
+
+
+    .button {
+        padding: 5px;
+        text-align: center;
+        background-color: #3498db;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        height: 75px;
+        width: 75px;
+    }
+
+    button:hover {
+        background-color: #0504aa;
+    }
+
+    div[id="wordWall"] {
+        display: none;
+    }
+
+    .button-grid {
+        margin-bottom: 5px;
+    }
+</style>
+
+<body>
+
+    <div id="inputDiv">
+        <div id="rowsDiv">
+            <input type="text" id="row1" name="row1" placeholder="Hello World">
+        </div>
+
+
+        <input type="submit" id="addRow" value="Add Row">
+        <input type="submit" id="makeWall" value="Submit">
+    </div>
+    <div class="centeredDiv" id="wordWall">
+        <div class="button-grid">
+            <button class="button"></button>
+            <button class="button"></button>
+            <button class="button"></button>
+            <button class="button"></button>
+            <button class="button"></button>
+        </div>
+        <div class="button-grid">
+            <button class="button"></button>
+            <button class="button"></button>
+            <button class="button"></button>
+            <button class="button"></button>
+        </div>
+    </div>
+
+
+
+
+</body>
+
+<script>
+    let rowCount = 1;
+    let rowsDiv = document.getElementById("rowsDiv");
+    let rows = [];
+    rows.push(document.getElementById("row1"))
+
+    document.getElementById('addRow').onclick = function () {
+        rowCount++;
+        console.log("Adding new row", rowCount);
+        let newRow = document.createElement("input");
+        newRow.type = "text";
+        newRow.id = "row" + rowCount;
+        newRow.name = "row" + rowCount;
+        newRow.placeholder = "Hello World";
+        rows.push(newRow);
+        rowsDiv.appendChild(newRow);
+
+    };
+
+    document.getElementById('makeWall').onclick = function () {
+        document.getElementById("inputDiv").style.display = "none";
+        document.getElementById("wordWall").style.display = "flex"
+        //alert("makeWall was clicked");
+    };
+
+
+
+</script>
+
+
+</html>
