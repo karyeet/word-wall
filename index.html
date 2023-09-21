@@ -56,11 +56,14 @@
         padding: 5px;
         text-align: center;
         background-color: #3498db;
-        color: #fff;
+        color: #000000;
         border: none;
         cursor: pointer;
         height: 75px;
-        width: 75px;
+        width: 60px;
+        vertical-align: top;
+        font-size: 200%;
+        margin-left: 5px;
     }
 
     button:hover {
@@ -79,7 +82,7 @@
 <body>
 
     <div id="inputDiv">
-        <div id="rowsDiv">
+        <div id="inputRowsDiv">
             <input type="text" id="row1" name="row1" placeholder="Hello World">
         </div>
 
@@ -88,19 +91,9 @@
         <input type="submit" id="makeWall" value="Submit">
     </div>
     <div class="centeredDiv" id="wordWall">
-        <div class="button-grid">
-            <button class="button"></button>
-            <button class="button"></button>
-            <button class="button"></button>
-            <button class="button"></button>
-            <button class="button"></button>
-        </div>
-        <div class="button-grid">
-            <button class="button"></button>
-            <button class="button"></button>
-            <button class="button"></button>
-            <button class="button"></button>
-        </div>
+        <input type="text" id="letterToReveal" name="letterToReveal" placeholder="A" maxlength="1">
+        <input type="submit" id="submitLetter" value="Reveal Letter">
+        <input type="submit" id="revealAll" value="Reveal All">
     </div>
 
 
@@ -110,9 +103,10 @@
 
 <script>
     let rowCount = 1;
-    let rowsDiv = document.getElementById("rowsDiv");
-    let rows = [];
-    rows.push(document.getElementById("row1"))
+    let inputRowsDiv = document.getElementById("inputRowsDiv");
+    let wordRows = [];
+    const letterButtons = [];
+    wordRows.push(document.getElementById("row1"))
 
     document.getElementById('addRow').onclick = function () {
         rowCount++;
@@ -122,14 +116,75 @@
         newRow.id = "row" + rowCount;
         newRow.name = "row" + rowCount;
         newRow.placeholder = "Hello World";
-        rows.push(newRow);
-        rowsDiv.appendChild(newRow);
+        wordRows.push(newRow);
+        inputRowsDiv.appendChild(newRow);
 
     };
 
+    const letterToReveal = document.getElementById("letterToReveal");
+    const submitLetter = document.getElementById("submitLetter");
+
+    submitLetter.onclick = function () {
+        const letter = letterToReveal.value.toUpperCase();
+        for (const letterButton of letterButtons) {
+            console.log(letter, letterButton["data-letter"])
+            if (letterButton["data-letter"] == letter) {
+                letterButton.textContent = letterButton["data-letter"];
+                letterButton.style.backgroundColor = "#FFFFFF"
+            }
+        }
+    }
+
+    const revealAll = document.getElementById("revealAll")
+    revealAll.onclick = function () {
+        const letter = letterToReveal.value.toUpperCase();
+        for (const letterButton of letterButtons) {
+            letterButton.textContent = letterButton["data-letter"];
+            letterButton.style.backgroundColor = "#FFFFFF"
+        }
+    }
+
     document.getElementById('makeWall').onclick = function () {
+        // make inputs invisible
         document.getElementById("inputDiv").style.display = "none";
-        document.getElementById("wordWall").style.display = "flex"
+        // get wordWall and make it visible
+        const wordWAll = document.getElementById("wordWall");
+        wordWAll.style.display = "flex";
+
+        // const rowDivs = []
+
+        const letterOrNumber = new RegExp(/[a-zA-Z0-9]/);
+        for (const row of wordRows) {
+            // create the row div container
+            const newRowDiv = document.createElement("div");
+            newRowDiv.className = "button-grid";
+            // rowDivs.push(newRowDiv)
+            // create the individual letters
+
+            for (const letter of row.value) {
+                // create new button
+                const newLetterButton = document.createElement("button");
+                newLetterButton.className = "button";
+                newLetterButton["data-letter"] = letter.toUpperCase();
+
+                if (!letter.match(letterOrNumber)) {
+                    newLetterButton.textContent = newLetterButton["data-letter"];
+                    newLetterButton.style.backgroundColor = "#FFFFFF"
+                }
+                // add button to buttons array
+                letterButtons.push(newLetterButton);
+                // attach listener
+                newLetterButton.onclick = function () {
+                    newLetterButton.textContent = newLetterButton["data-letter"];
+                    newLetterButton.style.backgroundColor = "#FFFFFF"
+                }
+                // put button on row div
+                newRowDiv.appendChild(newLetterButton);
+            }
+            // put row div on the word wall
+            wordWAll.appendChild(newRowDiv);
+
+        }
         //alert("makeWall was clicked");
     };
 
