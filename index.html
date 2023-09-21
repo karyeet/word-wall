@@ -74,12 +74,41 @@
         display: none;
     }
 
+    input[id="revealAll"] {
+        display: none;
+        position: sticky;
+        bottom: 0;
+        justify-content: center;
+    }
+
+    div[id="letterRevealDiv"] {
+        display: none;
+        position: sticky;
+        top: 0;
+    }
+
     .button-grid {
         margin-bottom: 5px;
+    }
+
+    .box {
+        width: 200px;
+        height: 25px;
+        border: 3px solid #FFD700;
+        padding: 10px;
+        margin: 10px;
+        border-style:solid;
+        background-color: #4651e9;
+        justify-content: center;
+        align-items: center;
+        text-align: center
+
     }
 </style>
 
 <body>
+
+
 
     <div id="inputDiv">
         <div id="inputRowsDiv">
@@ -90,15 +119,23 @@
         <input type="submit" id="addRow" value="Add Row">
         <input type="submit" id="makeWall" value="Submit">
     </div>
-    <div class="centeredDiv" id="wordWall">
-        <input type="text" id="letterToReveal" name="letterToReveal" placeholder="A" maxlength="1">
+
+    <div id="letterRevealDiv">
+        <input style="font-size: 150%;"type="text" id="letterToReveal" name="letterToReveal" placeholder="A" maxlength="1">
         <input type="submit" id="submitLetter" value="Reveal Letter">
-        <input type="submit" id="revealAll" value="Reveal All">
+        <div class="box">
+            <p id="countText" style="font-size: large;margin: auto ;color: #FFD700;"></p>
+        </div>
+        
     </div>
 
 
+    <div class="centeredDiv" id="wordWall">
+
+    </div>
 
 
+    <input type="submit" id="revealAll" value="Reveal All">
 </body>
 
 <script>
@@ -123,19 +160,23 @@
 
     const letterToReveal = document.getElementById("letterToReveal");
     const submitLetter = document.getElementById("submitLetter");
+    const revealAll = document.getElementById("revealAll");
+    const countText = document.getElementById("countText");
 
     submitLetter.onclick = function () {
+        let numChanged = 0;
         const letter = letterToReveal.value.toUpperCase();
         for (const letterButton of letterButtons) {
             console.log(letter, letterButton["data-letter"])
             if (letterButton["data-letter"] == letter) {
+                numChanged++
                 letterButton.textContent = letterButton["data-letter"];
                 letterButton.style.backgroundColor = "#FFFFFF"
             }
         }
+        countText.textContent = numChanged + " " + letter;
     }
 
-    const revealAll = document.getElementById("revealAll")
     revealAll.onclick = function () {
         const letter = letterToReveal.value.toUpperCase();
         for (const letterButton of letterButtons) {
@@ -150,6 +191,8 @@
         // get wordWall and make it visible
         const wordWAll = document.getElementById("wordWall");
         wordWAll.style.display = "flex";
+        revealAll.style.display = "flex";
+        document.getElementById("letterRevealDiv").style.display = "flex";
 
         // const rowDivs = []
 
