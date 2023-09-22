@@ -105,18 +105,27 @@
         border: 3px solid #FFD700;
         padding: 10px;
         margin: 10px;
-        border-style:solid;
+        border-style: solid;
         background-color: #4651e9;
         justify-content: center;
         align-items: center;
         text-align: center
+    }
 
+    div[id=letterNotInPuzzleX] {
+        display: none;
+        position:absolute; 
+        left:50%; 
+        top:50%; 
+        transform: translate(-50%, -50%)
     }
 </style>
 
 <body>
 
-
+    <div id="letterNotInPuzzleX">
+        <img src="./bigredx.png" alt="big red x">
+    </div>
 
     <div id="inputDiv">
         <div id="inputRowsDiv">
@@ -129,12 +138,13 @@
     </div>
 
     <div id="letterRevealDiv">
-        <input style="font-size: 150%;"type="text" id="letterToReveal" name="letterToReveal" placeholder="A" maxlength="1">
+        <input style="font-size: 150%;" type="text" id="letterToReveal" name="letterToReveal" placeholder="A"
+            maxlength="1">
         <input type="submit" id="submitLetter" value="Reveal Letter">
         <div class="box">
             <p id="countText" style="font-size: large;margin: auto ;color: #FFD700;"></p>
         </div>
-        
+
     </div>
 
 
@@ -165,7 +175,10 @@
         inputRowsDiv.appendChild(newRow);
 
     };
-
+    
+    const positiveping = new Audio("./positiveping.mp3");
+    const nolettersound = new Audio("./nolettersound.mp3");
+    const letterNotInPuzzleX = document.getElementById("letterNotInPuzzleX");
     const letterToReveal = document.getElementById("letterToReveal");
     const submitLetter = document.getElementById("submitLetter");
     const revealAll = document.getElementById("revealAll");
@@ -176,13 +189,26 @@
         const letter = letterToReveal.value.toUpperCase();
         for (const letterButton of letterButtons) {
             console.log(letter, letterButton["data-letter"])
-            if (letterButton["data-letter"] == letter) {
+            if (letterButton["data-letter"] == letter && letterButton.textContent != letterButton["data-letter"]) {
                 numChanged++
                 letterButton.textContent = letterButton["data-letter"];
                 letterButton.style.backgroundColor = "#FFFFFF"
             }
         }
         countText.textContent = numChanged + " " + letter;
+        // play sad sound and show x
+        if(numChanged == 0){
+            letterNotInPuzzleX.style.display = "block"
+            nolettersound.load()
+            nolettersound.play()
+            setTimeout(()=>{
+                letterNotInPuzzleX.style.display = "none"
+            }, 1500)
+        }else{
+            // play happy sound
+            positiveping.load()
+            positiveping.play()
+        }
     }
 
     revealAll.onclick = function () {
